@@ -3,7 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+  "test": "playwright test",
+  "test:q1": "playwright test tests/q1-invalid-login.spec.js",
+  "test:q2": "playwright test tests/q2-register-cart.spec.js",
+  "test:q3": "playwright test tests/q3-e2e-order.spec.js",
+  "report:html": "playwright show-report",
+  "report:allure": "allure generate allure-results --clean -o allure-report && allure open allure-report"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
