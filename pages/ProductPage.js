@@ -6,7 +6,8 @@ class ProductPage {
     this.booksLink = page.getByRole('link', { name: 'Books' }).first();
     this.productLink = page.getByRole('link', { name: 'Computing and Internet', exact: true });
 
-    // Cart Actions & Notification
+    // Quantity, Cart Actions & Notification
+    this.qtyInput = page.locator('#addtocart_13_EnteredQuantity');
     this.addToCartButton = page.locator('#add-to-cart-button-13');
     this.successNotification = page.getByText('The product has been added to');
     this.cartLink = page.getByRole('link', { name: 'Shopping cart' }).first();
@@ -18,6 +19,10 @@ class ProductPage {
 
   async openProduct() {
     await this.productLink.click();
+  }
+
+  async setQuantity(qty) {
+    await this.qtyInput.fill(String(qty));
   }
 
   async addToCart() {
