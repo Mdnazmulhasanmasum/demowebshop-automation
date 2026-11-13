@@ -1,0 +1,135 @@
+{
+  "info": {
+    "_postman_id": "33e2b216-29c4-46e1-996d-94b9cb3e1988",
+    "name": "JSONPlaceholder Users API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response is a non-empty array\", function () {",
+              "    pm.expect(body).to.be.an('array');",
+              "    pm.expect(body.length).to.be.above(0);",
+              "});",
+              "",
+              "pm.test(\"Each user has id, name and email\", function () {",
+              "    body.forEach(user => {",
+              "        pm.expect(user).to.have.property('id');",
+              "        pm.expect(user).to.have.property('name');",
+              "        pm.expect(user).to.have.property('email');",
+              "    });",
+              "});",
+              "",
+              "const selectedUser = body[0];",
+              "pm.collectionVariables.set('userId', selectedUser.id);",
+              "pm.collectionVariables.set('selectedUser', JSON.stringify(selectedUser));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "https://jsonplaceholder.typicode.com/users"
+      }
+    },
+    {
+      "name": "Update User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const user = JSON.parse(pm.collectionVariables.get('selectedUser'));",
+              "",
+              "const randomNum = Math.floor(Math.random() * 1000);",
+              "user.name = `Updated User ${randomNum}`;",
+              "user.email = `updated${randomNum}@example.com`;",
+              "user.company.name = `Updated Company ${randomNum}`;",
+              "",
+              "pm.collectionVariables.set('updatedUser', JSON.stringify(user));",
+              "pm.collectionVariables.set('expectedUser', JSON.stringify(user));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const body = pm.response.json();",
+              "",
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"ID matches userId\", function () {",
+              "    const expectedId = Number(pm.collectionVariables.get('userId'));",
+              "    pm.expect(body.id).to.eql(expectedId);",
+              "});",
+              "",
+              "pm.test(\"Phone is not empty\", function () {",
+              "    pm.expect(body.phone).to.not.be.empty;",
+              "});",
+              "",
+              "pm.test(\"Name matches updated name\", function () {",
+              "    const expectedUser = JSON.parse(pm.collectionVariables.get('expectedUser'));",
+              "    pm.expect(body.name).to.eql(expectedUser.name);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "https://jsonplaceholder.typicode.com/users/{{userId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{{updatedUser}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "selectedUser",
+      "value": ""
+    },
+    {
+      "key": "updatedUser",
+      "value": ""
+    },
+    {
+      "key": "expectedUser",
+      "value": ""
+    }
+  ]
+}
