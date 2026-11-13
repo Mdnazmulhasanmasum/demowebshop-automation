@@ -10,3 +10,4 @@ node_modules/
 allure-results/
 allure-report/
 api-tests/report/
+api-tests/report/
